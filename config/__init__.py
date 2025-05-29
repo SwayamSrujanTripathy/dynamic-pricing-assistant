@@ -1,3 +1,1 @@
-from .settings import settings
-
-__all__ = ['settings']
+# Empty file to make config/ a Python package

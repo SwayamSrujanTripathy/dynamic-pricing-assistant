@@ -3,3 +3,5 @@ ERROR:agents.competitor_scraper:CompetitorScraperAgent error: Ollama call failed
 ERROR:agents.price_optimizer:PriceOptimizerAgent error: Ollama call failed with status code 404. Maybe your model is not found and you should pull the model with `ollama pull deepseek-r1:1.5b`.
 ERROR:agents.impact_simulator:ImpactSimulatorAgent error: Ollama call failed with status code 404. Maybe your model is not found and you should pull the model with `ollama pull deepseek-r1:1.5b`.
 INFO:__main__:Processing query: Product: samsung, Specifications: S9000
+INFO:__main__:Processing query: Product: samsung, Specifications: S9000
+ERROR:__main__:Main error: Unknown format code 'f' for object of type 'str'

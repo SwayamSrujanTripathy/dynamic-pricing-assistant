@@ -5,3 +5,5 @@ ERROR:agents.impact_simulator:ImpactSimulatorAgent error: Ollama call failed wit
 INFO:__main__:Processing query: Product: samsung, Specifications: S9000
 INFO:__main__:Processing query: Product: samsung, Specifications: S9000
 ERROR:__main__:Main error: Unknown format code 'f' for object of type 'str'
+INFO:__main__:Processing query: Product: Nike Running Shoes, Specifications: Air Zoom Pegasus 40
+ERROR:__main__:Main error: Unknown format code 'f' for object of type 'str'

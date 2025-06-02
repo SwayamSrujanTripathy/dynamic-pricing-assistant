@@ -1,0 +1,8 @@
+{
+  "source": {"source": "Amazon", "url": "..."},
+  "product": {
+    "name": "Samsung Galaxy S22",
+    "specs": {"price": "₹24,990"},
+    "category": {"name": "Smartphone"}
+  }
+}

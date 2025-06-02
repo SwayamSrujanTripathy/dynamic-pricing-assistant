@@ -1,104 +1,82 @@
 from langchain.tools import tool
+from pinecone import Pinecone
 import os
-from pinecone import Pinecone, ServerlessSpec
 import logging
-import json
-from datetime import datetime
+from langchain_huggingface import HuggingFaceEmbeddings
  
 logger = logging.getLogger(__name__)
  
-def initialize_pinecone():
-    """Initialize Pinecone client and ensure index exists."""
-    api_key = os.getenv("PINECONE_API_KEY")
-    if not api_key:
-        logger.error("PINECONE_API_KEY not found")
-        return None
+# Initialize Pinecone
+pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
+index_name = "dynamic-pricing-index"
+index = pc.Index(index_name)
  
-    pc = Pinecone(api_key=api_key)
-    index_name = "dynamic-pricing-index"
- 
-    if index_name not in [idx["name"] for idx in pc.list_indexes()]:
-        logger.info(f"Creating Pinecone index: {index_name}")
-        try:
-            pc.create_index(
-                name=index_name,
-                dimension=384,
-                metric="cosine",
-                spec=ServerlessSpec(cloud="aws", region="us-west-2")
-            )
-        except Exception as e:
-            logger.error(f"Failed to create index: {e}")
-            return None
- 
-    return pc.Index(index_name)
+# Initialize embeddings
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
  
 @tool
-def store_in_pinecone(data: dict) -> bool:
+def store_in_pinecone(data: dict) -> dict:
     """
-    Store scraped product data in Pinecone or fallback to JSON.
+    Store product data in Pinecone vector database.
    
     Args:
-        data (dict): Product data (product_name, price, specifications).
+        data (dict): Product data with product_name, price, specifications, and platform.
    
     Returns:
-        bool: True if stored, False otherwise.
+        dict: Status of storage operation.
     """
     try:
-        index = initialize_pinecone()
-        if index is None:
-            logger.warning("Falling back to JSON")
-            os.makedirs("data/scraped_data", exist_ok=True)
-            with open(f"data/scraped_data/scrape_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json", "w") as f:
-                json.dump(data, f)
-            return True
- 
-        vector = [0.1] * 384  # Placeholder embedding
-        metadata = {"price": data["price"], "specifications": data.get("specifications", "")}
-        index.upsert(vectors=[(data["product_name"], vector, metadata)])
-        logger.info(f"Stored in Pinecone: {data['product_name']}")
-        return True
- 
+        product_id = f"{data.get('product_name', 'unknown')}_{data.get('platform', 'unknown')}"
+        text = f"{data.get('product_name', '')} {data.get('price', '')} {data.get('specifications', '')}"
+        vector = embeddings.embed_query(text)
+       
+        metadata = {
+            "product_name": data.get("product_name", ""),
+            "price": data.get("price", ""),
+            "platform": data.get("platform", ""),
+            "ram": data.get("specifications", {}).get("ram", ""),
+            "storage": data.get("specifications", {}).get("storage", "")
+        }
+       
+        index.upsert(vectors=[(product_id, vector, metadata)])
+        logger.info(f"Stored product in Pinecone: {product_id}")
+        return {"status": "success", "product_id": product_id}
+   
     except Exception as e:
-        logger.error(f"Pinecone store error: {e}")
-        os.makedirs("data/scraped_data", exist_ok=True)
-        with open(f"data/scraped_data/scrape_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json", "w") as f:
-            json.dump(data, f)
-        return True
+        logger.error(f"Pinecone storage error: {e}")
+        return {"status": "error", "error": str(e)}
  
 @tool
-def query_pinecone(query: str) -> list:
+def query_pinecone(query: str) -> dict:
     """
-    Query Pinecone for product data or fallback to JSON.
+    Query Pinecone for similar products.
    
     Args:
         query (str): Search query.
    
     Returns:
-        list: List of products (product_name, price, specifications).
+        dict: Matching products.
     """
     try:
-        index = initialize_pinecone()
-        if index is None:
-            logger.warning("Falling back to JSON")
-            import glob
-            files = glob.glob("data/scraped_data/scrape_*.json")
-            if files:
-                with open(max(files, key=os.path.getctime)) as f:
-                    return [json.load(f)]
-            return []
- 
-        vector = [0.1] * 384  # Placeholder
+        vector = embeddings.embed_query(query)
         results = index.query(vector=vector, top_k=5, include_metadata=True)
-        return [
+       
+        matches = [
             {
-                "product_name": r["id"],
-                "price": r["metadata"]["price"],
-                "specifications": r["metadata"].get("specifications", "")
+                "product_name": match["metadata"]["product_name"],
+                "price": match["metadata"]["price"],
+                "platform": match["metadata"]["platform"],
+                "specifications": {
+                    "ram": match["metadata"]["ram"],
+                    "storage": match["metadata"]["storage"]
+                }
             }
-            for r in results["matches"]
+            for match in results["matches"]
         ]
- 
+       
+        logger.info(f"Queried Pinecone for: {query}")
+        return {"matches": matches}
+   
     except Exception as e:
         logger.error(f"Pinecone query error: {e}")
-        return []
- 
+        return {"status": "error", "error": str(e)}

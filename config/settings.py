@@ -3,17 +3,8 @@ from dotenv import load_dotenv
  
 load_dotenv()
  
-# Ollama model name
-LLAMA_MODEL_NAME = "deepseek-r1:1.5b"
- 
-# Pinecone settings
+LLAMA_MODEL_NAME = os.getenv("OLLAMA_MODEL", "deepseek-r1:1.5b")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
-PINECONE_ENVIRONMENT = os.getenv("PINECONE_ENVIRONMENT")
-PINECONE_INDEX_NAME = "pricing-data"
- 
-# Flipkart base URL
-FLIPKART_BASE_URL = "https://www.amazon.in/"
- 
- 
- 
- 
+PINECONE_INDEX_NAME = "dynamic-pricing-index"
+FLIPKART_BASE_URL = "https://www.flipkart.com/"
+AMAZON_BASE_URL = "https://www.amazon.in/"

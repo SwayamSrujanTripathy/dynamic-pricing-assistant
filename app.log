@@ -7,3 +7,150 @@ INFO:__main__:Processing query: Product: samsung, Specifications: S9000
 ERROR:__main__:Main error: Unknown format code 'f' for object of type 'str'
 INFO:__main__:Processing query: Product: Nike Running Shoes, Specifications: Air Zoom Pegasus 40
 ERROR:__main__:Main error: Unknown format code 'f' for object of type 'str'
+INFO:__main__:Processing query: Product: Nike Running Shoes, Specifications: Air Zoom Pegasus 40
+ERROR:agents.competitor_scraper:CompetitorScraperAgent error: cannot schedule new futures after interpreter shutdown
+WARNING:__main__:No competitor prices found. Using fallback dataNORP
+INFO:__main__:Processing query: Product: Nike Running Shoes, Specifications: Air Zoom Pegasus 40
+WARNING:__main__:No competitor prices found. Using fallback dataNORP
+ERROR:agents.price_optimizer:PriceOptimizerAgent error: 'float' object has no attribute 'replace'
+ERROR:__main__:Main error: 'float' object has no attribute 'replace'
+INFO:__main__:Processing query: Product: vivo, Specifications: 8GB RAM, 256GB storage
+INFO:__main__:Running CompetitorScraperAgent
+INFO:agents.competitor_scraper:Executing CompetitorScraperAgent with query: Product: vivo, Specifications: 8GB RAM, 256GB storage
+INFO:agents.competitor_scraper:Trying query variation: Product: vivo, Specifications: 8GB RAM, 256GB storage
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:agents.competitor_scraper:ReAct agent output: {
+  "query": "Product: vivo, Specifications: 8GB RAM, 256GB storage",
+  "tool_names": [
+    "web_scraper",
+    "store_in_pinecone"
+  ],
+  "tools": [
+    "web_scraper: Scrape Amazon.in or Flipkart.com for the top product matching the product name and specifications.\n\nArgs:\n    query (str): Search query (e.g., \"Samsung Galaxy A54, Specifications: 8GB RAM, 256GB storage site:amazon.in\").\n\nReturns:\n    dict: Scraped products with product_name, price (INR), specifications, and platform.",
+    "store_in_pinecone: Store product data in Pinecone vector database.\n\nArgs:\n    data (dict): Product data with product_name, price, specifications, and platform.\n\nReturns:\n    dict: Status of storage operation."
+  ],
+  "agent_scratchpad": "",
+  "output": "Agent stopped due to iteration limit or time limit."
+}
+INFO:agents.competitor_scraper:Trying query variation: Product: vivo, 5G, Specifications: 8GB RAM, 256GB storage
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:__main__:Processing query: Product: vivo, Specifications: 8GB RAM, 256GB storage
+INFO:__main__:Running CompetitorScraperAgent
+INFO:agents.competitor_scraper:Executing CompetitorScraperAgent with query: Product: vivo, Specifications: 8GB RAM, 256GB storage
+INFO:agents.competitor_scraper:Trying query variation: Product: vivo, Specifications: 8GB RAM, 256GB storage
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:agents.competitor_scraper:ReAct agent output: {
+  "query": "Product: vivo, Specifications: 8GB RAM, 256GB storage",
+  "tool_names": [
+    "web_scraper",
+    "store_in_pinecone"
+  ],
+  "tools": [
+    "web_scraper: Scrape Amazon.in or Flipkart.com for the top product matching the product name and specifications.\n\nArgs:\n    query (str): Search query (e.g., \"Samsung Galaxy A54, Specifications: 8GB RAM, 256GB storage site:amazon.in\").\n\nReturns:\n    dict: Scraped products with product_name, price (INR), specifications, and platform.",
+    "store_in_pinecone: Store product data in Pinecone vector database.\n\nArgs:\n    data (dict): Product data with product_name, price, specifications, and platform.\n\nReturns:\n    dict: Status of storage operation."
+  ],
+  "agent_scratchpad": "",
+  "output": "Agent stopped due to iteration limit or time limit."
+}
+INFO:agents.competitor_scraper:Trying query variation: Product: vivo, 5G, Specifications: 8GB RAM, 256GB storage
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:agents.competitor_scraper:ReAct agent output: {
+  "query": "Product: vivo, 5G, Specifications: 8GB RAM, 256GB storage",
+  "tool_names": [
+    "web_scraper",
+    "store_in_pinecone"
+  ],
+  "tools": [
+    "web_scraper: Scrape Amazon.in or Flipkart.com for the top product matching the product name and specifications.\n\nArgs:\n    query (str): Search query (e.g., \"Samsung Galaxy A54, Specifications: 8GB RAM, 256GB storage site:amazon.in\").\n\nReturns:\n    dict: Scraped products with product_name, price (INR), specifications, and platform.",
+    "store_in_pinecone: Store product data in Pinecone vector database.\n\nArgs:\n    data (dict): Product data with product_name, price, specifications, and platform.\n\nReturns:\n    dict: Status of storage operation."
+  ],
+  "agent_scratchpad": "",
+  "output": "Agent stopped due to iteration limit or time limit."
+}
+INFO:agents.competitor_scraper:Trying query variation: Product: vivo,
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:agents.competitor_scraper:ReAct agent output: {
+  "query": "Product: vivo,",
+  "tool_names": [
+    "web_scraper",
+    "store_in_pinecone"
+  ],
+  "tools": [
+    "web_scraper: Scrape Amazon.in or Flipkart.com for the top product matching the product name and specifications.\n\nArgs:\n    query (str): Search query (e.g., \"Samsung Galaxy A54, Specifications: 8GB RAM, 256GB storage site:amazon.in\").\n\nReturns:\n    dict: Scraped products with product_name, price (INR), specifications, and platform.",
+    "store_in_pinecone: Store product data in Pinecone vector database.\n\nArgs:\n    data (dict): Product data with product_name, price, specifications, and platform.\n\nReturns:\n    dict: Status of storage operation."
+  ],
+  "agent_scratchpad": "",
+  "output": "Agent stopped due to iteration limit or time limit."
+}
+INFO:agents.competitor_scraper:Trying query variation: Product: vivo, 5G
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+INFO:agents.competitor_scraper:ReAct agent output: {
+  "query": "Product: vivo, 5G",
+  "tool_names": [
+    "web_scraper",
+    "store_in_pinecone"
+  ],
+  "tools": [
+    "web_scraper: Scrape Amazon.in or Flipkart.com for the top product matching the product name and specifications.\n\nArgs:\n    query (str): Search query (e.g., \"Samsung Galaxy A54, Specifications: 8GB RAM, 256GB storage site:amazon.in\").\n\nReturns:\n    dict: Scraped products with product_name, price (INR), specifications, and platform.",
+    "store_in_pinecone: Store product data in Pinecone vector database.\n\nArgs:\n    data (dict): Product data with product_name, price, specifications, and platform.\n\nReturns:\n    dict: Status of storage operation."
+  ],
+  "agent_scratchpad": "",
+  "output": "Agent stopped due to iteration limit or time limit."
+}
+WARNING:agents.competitor_scraper:No products found from Amazon.in or Flipkart.com
+INFO:__main__:Scraped 0 products
+WARNING:__main__:No products found from scraper
+INFO:__main__:Running PriceOptimizerAgent
+INFO:agents.price_optimizer:Executing PriceOptimizerAgent with 0 products
+WARNING:agents.price_optimizer:No prices found for optimization
+INFO:__main__:PriceOptimizerAgent result: {
+  "suggested_price": "\u20b920,000",
+  "strategy": "No competitor data for vivo,. Set \u20b920,000 as a competitive price for mid-range smartphones to attract customers."
+}
+INFO:__main__:Running ImpactSimulatorAgent
+ERROR:__main__:Main error: 'ImpactSimulatorAgent' object has no attribute 'execute'

@@ -1,86 +1,100 @@
-from langchain_community.llms import Ollama
-from langchain.prompts import PromptTemplate
-from langchain.agents import create_react_agent, AgentExecutor
-from config.settings import LLAMA_MODEL_NAME
+"""
+    Simulate the impact of a suggested price on sales and customer satisfaction.
+   
+    Args:
+        query (str): Product query with price (e.g., "Samsung Galaxy A54, Specifications:..., price: ₹20,000").
+        products (list): List of competitor products with name, price, and platform.
+   
+    Returns:
+        dict: Impact analysis with sales, revenue, and satisfaction.
+    """
 import logging
 import re
- 
+
 logger = logging.getLogger(__name__)
- 
+
 class ImpactSimulatorAgent:
     def __init__(self):
-        self.llm = Ollama(model=LLAMA_MODEL_NAME)
-        self.tools = []
-        self.last_simulation = None
- 
-        template = """
-        You are an impact simulator. Estimate customer influx and profit margins for a pricing strategy. No tools available; use reasoning.
- 
-        Available tools: {tools}
-        Tool names: {tool_names}
- 
-        Respond in:
-        ```
-        Thought: <Reasoning>
-        Action: simulation_result
-        Action Input: <Customer influx and margin estimate>
-        ```
- 
-        Agent scratchpad: {agent_scratchpad}
- 
-        Base estimates on price provided in query.
- 
-        Query: {input}
+        pass
+
+    def execute(self, query: str, products: list) -> dict:
         """
-        self.prompt = PromptTemplate(
-            input_variables=["input", "agent_scratchpad", "tool_names", "tools"],
-            template=template
-        )
-        self.agent = create_react_agent(self.llm, self.tools, self.prompt)
-        self.executor = AgentExecutor(
-            agent=self.agent,
-            tools=self.tools,
-            verbose=True,
-            handle_parsing_errors=True,
-            max_iterations=10
-        )
- 
-    def run(self, query: str, suggested_price: str = None) -> dict:
+        Simulate the impact of a suggested price on sales and customer satisfaction.
+        
+        Args:
+            query (str): Product query with price (e.g., "Samsung Galaxy A54, Specifications:..., price: ₹20,000").
+            products (list): List of competitor products with name, price, and platform.
+        
+        Returns:
+            dict: Impact analysis with sales, revenue, and satisfaction.
+        """
         try:
-            # Extract price from suggested_price or query
-            price = 0
-            if suggested_price:
-                price_str = suggested_price.replace("₹", "").replace(",", "")
-                price = float(price_str) if price_str else 0
+            logger.info(f"Executing ImpactSimulatorAgent with query: {query}")
+            
+            # Extract suggested price from query
+            price_match = re.search(r'price:\s*₹([\d\s,]+)', query)
+            if not price_match:
+                return {"impact": "Cannot estimate impact: No valid price provided"}
+            
+            suggested_price = float(price_match.group(1).replace(",", "").strip())
+            product_name = query.split("Specifications:")[0].replace("Product:", "").strip()
+
+            # Extract competitor prices
+            competitor_prices = []
+            for product in products:
+                try:
+                    price_str = product["price"].replace("₹", "").replace(",", "").strip()
+                    competitor_prices.append(float(price_str))
+                except (ValueError, KeyError) as e:
+                    logger.error(f"Error parsing competitor price: {e}")
+                    continue
+
+            # Default impact if no competitors
+            if not competitor_prices:
+                sales_min = 50000
+                sales_max = 70000
+                revenue_min = sales_min * suggested_price / 1000000
+                revenue_max = sales_max * suggested_price / 1000000
+                satisfaction = "Moderate"
+                impact = (
+                    f"Projected Sales: {sales_min:,.0f}-{sales_max:,.0f} units/month, "
+                    f"Revenue: ₹{revenue_min:,.1f}M-₹{revenue_max:,.2f}M/month, "
+                    f"Customer Satisfaction: {satisfaction} (no competitor data, competitive pricing assumed)."
+                )
+                return {"impact": impact}
+
+            # Calculate average competitor price
+            avg_competitor_price = sum(competitor_prices) / len(competitor_prices)
+            
+            # Estimate sales based on price competitiveness
+            price_ratio = suggested_price / avg_competitor_price
+            if price_ratio < 0.9:
+                sales_min = 100000
+                sales_max = 200000
+                satisfaction = "Excellent"
+            elif price_ratio < 1.0:
+                sales_min = 70000
+                sales_max = 120000
+                satisfaction = "High"
             else:
-                match = re.search(r'₹([\d,]+)', query)
-                if match:
-                    price = float(match.group(1).replace(",", ""))
- 
-            result = self.executor.invoke({"input": query})
-            output = result.get("output", "")
- 
-            if "simulation_result" in output.lower():
-                self.last_simulation = output.split("Action Input:")[-1].strip()
-                return {"impact": self.last_simulation}
- 
-            # Estimate based on price
-            if price > 50000:
-                influx = "8% customer influx"
-                margin = "20% profit margin"
-            elif price > 20000:
-                influx = "12% customer influx"
-                margin = "15% profit margin"
-            else:
-                influx = "15% customer influx"
-                margin = "10% profit margin"
- 
-            impact = f"{influx} with {margin} for {suggested_price or 'unknown price'}"
-            self.last_simulation = impact
+                sales_min = 30000
+                sales_max = 60000
+                satisfaction = "Moderate"
+
+            # Calculate revenue
+            revenue_min = sales_min * suggested_price / 1000000
+            revenue_max = sales_max * suggested_price / 1000000
+
+            impact = (
+                f"Projected Sales: {sales_min:,.0f}-{sales_max:,.0f} units/month, "
+                f"Revenue: ₹{revenue_min:,.1f}M-₹{revenue_max:,.2f}M/month, "
+                f"Customer Satisfaction: {satisfaction} (price ₹{int(suggested_price):,} vs. "
+                f"competitor average ₹{int(avg_competitor_price):,})."
+            )
+
+            logger.info(f"Impact simulation: {impact}")
             return {"impact": impact}
- 
+
         except Exception as e:
             logger.error(f"ImpactSimulatorAgent error: {e}")
-            if self.last_simulation:
-                return {"impact": self.last_simulation}
-            return {"impact": f"Error: {str(e)}; estimated 12% influx with 15% margin"}
+            return {"impact": f"Cannot estimate impact: Error {str(e)}"}
